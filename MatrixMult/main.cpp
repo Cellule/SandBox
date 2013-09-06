@@ -5,14 +5,24 @@ using namespace std;
 #include <iostream>
 #include <vector>
 #include <time.h>
-#include <ppl.h>
-#include "MatrixUtils.h"
-#include "conio.h"
+#include <string.h>
 
+#if WIN32
+#include <ppl.h>
+#include "conio.h"
+#define getch() _getch()
+
+#else
+#include <curses.h>
+#include <stdlib.h>
+
+#endif
+
+#include "MatrixUtils.h"
 
 // Transpose, optimisation for concurrent reading of second matrix elements
 #define USE_TRANSPOSE 1
-#define USE_MULTITHREAD 0
+#define USE_MULTITHREAD (WIN32 && 0)
 
 
 const int CutOffDefault = 128;
@@ -30,7 +40,8 @@ int Strassen(int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix);
 void Pause()
 {
     cout << "Press any key to continue\n";
-    _getch();
+    cin.ignore().get();
+    //getch();
 }
 
 MatrixElem** ReadMatrixFromFile(char* filename)
@@ -121,7 +132,7 @@ void Tests()
     }
 
     ///////////////
-    // Test SubMatrix
+    // Test Subdivde Matrix
     ///////////////
     {
         cout << "Test SubMatrix ==========================\n\n";
@@ -185,6 +196,7 @@ void Tests()
             }
         }
 
+		CutOff = 1;
         Strassen(n,m1,m2,res);
         for(int i=0; i<n; ++i)
         {
@@ -214,8 +226,8 @@ STOPTEST:
 
 void FindCutOff()
 {
-    const int nPower = 10;
-    const int n = 1<<nPower;
+    const int nPower = 8;
+    //const int n = 1<<nPower;
     CutOff = 1<<9;
 
     float previousTime = 99999999.f;
@@ -225,10 +237,7 @@ void FindCutOff()
     while(CutOff > 0)
     {
         float time = ExecuteMultiplication(nPower,Strassen);
-        if(time < previousTime)
-        {
-        }
-        else
+        if(time >= previousTime)
         {
             forward = !forward;
         }
@@ -246,8 +255,6 @@ void FindCutOff()
         previousTime = time;
 
     }
-
-
 
     Pause();
 }
@@ -338,7 +345,7 @@ float ExecuteMultiplication( int nPower, MultiplicationFunction func )
     for(int x=1; x<=5; ++x)
     {
         char filename[32];
-        sprintf_s(filename,"data/ex_n%d.%d",nPower,x);
+        sprintf(filename,"data/ex_n%d.%d",nPower,x);
         MatrixElem** m = ReadMatrixFromFile(filename);
 
         if(!m)
@@ -357,7 +364,7 @@ float ExecuteMultiplication( int nPower, MultiplicationFunction func )
                 t = clock() - t;
 
                 DeleteMatrix(n,r);
-                meanTime += (float)t/1000.f;
+                meanTime += (float)t/CLOCKS_PER_SEC;
                 ++nbMult;
             }
             matrix.push_back(m);

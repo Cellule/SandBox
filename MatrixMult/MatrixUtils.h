@@ -103,11 +103,11 @@ int CopyMatrix(int n, MatrixElem** original, MatrixElem** copie)
 {
     for(int i=0; i<n; ++i)
     {
-        memcpy(copie[i],original[i],n*sizeof(MatrixElem));
-//         for(int j=0; j<n; ++j)
-//         {
-//             copie[i][j] = original[i][j];
-//         }
+//        memcpy(copie[i],original[i],n*sizeof(MatrixElem));
+         for(int j=0; j<n; ++j)
+         {
+             copie[i][j] = original[i][j];
+         }
     }
 
     return 1;
