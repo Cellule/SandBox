@@ -14,11 +14,14 @@ MatrixElem** AllocateMatrix(int n)
 
 void DeleteMatrix( int n, MatrixElem** matrix )
 {
-    for(int i=0; i<n; ++i)
-    {
-        delete[] matrix[i];
-    }
-    delete[] matrix;
+	if(matrix)
+	{
+		for(int i=0; i<n; ++i)
+		{
+			delete[] matrix[i];
+		}
+		delete[] matrix;
+	}
 }
 
 
