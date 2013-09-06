@@ -1,4 +1,5 @@
 using namespace std;
+#define _CRT_SECURE_NO_WARNINGS 1
 
 #include <fstream>
 #include <iostream>
@@ -14,22 +15,25 @@ using namespace std;
 #define USE_MULTITHREAD 0
 
 
-int CutOff = 2;
+const int CutOffDefault = 128;
+int CutOff = CutOffDefault;
 
 typedef int(*MultiplicationFunction)(int , MatrixElem** , MatrixElem** , MatrixElem** );
 
 float ExecuteMultiplication( int nPower, MultiplicationFunction func );
+/// Only preprocess function must be visible to the rest to avoid use the basic function unintentionally
+int MultMatrixBasicPreprocess(const int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix);
+int Strassen(int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix);
+
+
+
 void Pause()
 {
     cout << "Press any key to continue\n";
     _getch();
 }
 
-MatrixElem** ReadMatrixFromFile(char* filename
-#if USE_TRANSPOSE
-                        ,bool transpose
-#endif
-                        )
+MatrixElem** ReadMatrixFromFile(char* filename)
 {
     ifstream file(filename,ios::in);
     if(!file.fail())
@@ -45,52 +49,25 @@ MatrixElem** ReadMatrixFromFile(char* filename
         }
 #endif
 
-        int nElem = 1 << n;
-        MatrixElem** matrix = AllocateMatrix(nElem);
+    int nElem = 1 << n;
+    MatrixElem** matrix = AllocateMatrix(nElem);
 
-#if USE_TRANSPOSE
-        if(!transpose)
+        // normal reading
+        for(int i=0; i<nElem; ++i)
         {
-#endif
-            // normal reading
-            for(int i=0; i<nElem; ++i)
+            for(int j=0; j<nElem; ++j)
             {
-                for(int j=0; j<nElem; ++j)
-                {
-                    file >> matrix[i][j];
-    #if _DEBUG
-                    // Not enough elements
-                    if(j!=nElem && i!=nElem-1 && file.eof())
-                    {
-                        printf("Invalid Matrix in file %s\n",filename);
-                        goto READ_MATRIX_ERROR;
-                    }
-    #endif
-                }
-            }
-
-#if USE_TRANSPOSE
-        }
-        else
-        {
-            // Transpose matrix while reading
-            for(int i=0; i<nElem; ++i)
-            {
-                for(int j=0; j<nElem; ++j)
-                {
-                    file >> matrix[j][i];
+                file >> matrix[i][j];
 #if _DEBUG
-                    // Not enough elements
-                    if(j!=nElem && i!=nElem-1 && file.eof())
-                    {
-                        printf("Invalid Matrix in file %s\n",filename);
-                        goto READ_MATRIX_ERROR;
-                    }
-#endif
+                // Not enough elements
+                if(j!=nElem && i!=nElem-1 && file.eof())
+                {
+                    printf("Invalid Matrix in file %s\n",filename);
+                    goto READ_MATRIX_ERROR;
                 }
+#endif
             }
         }
-#endif
 
 
         return matrix;
@@ -106,6 +83,299 @@ READ_MATRIX_ERROR:
     file.close();
     return 0;
 }
+
+/// Tests to validate functions and algo
+void Tests()
+{
+    ///////////////
+    // Test Sum  Sub
+    ///////////////
+    {
+        cout << "Test Sum ==========================\n\n";
+        const int n = 2;
+        MatrixElem** m1 = GenerateMatrix(n), 
+            **m2 = GenerateMatrix(n),
+            **r = AllocateMatrix(n);
+        SumMatrix(n,m1,m2,r);
+        PrintMatrixSideBySide(n,m1,m2,'+');
+        PrintMatrix(n,r);
+        cout << "Test Sub ==========================\n\n";
+        PrintMatrixSideBySide(n,r,m2,'-');
+        SubstractMatrix(n,r,m2,r);
+        PrintMatrix(n,r);
+
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                if(r[i][j] != m1[i][j])
+                {
+                    cout << "ERROR in sub|sum\n\n";
+                    break;
+                }
+            }
+        }
+        DeleteMatrix(n,m1);
+        DeleteMatrix(n,m2);
+        DeleteMatrix(n,r);
+    }
+
+    ///////////////
+    // Test SubMatrix
+    ///////////////
+    {
+        cout << "Test SubMatrix ==========================\n\n";
+        const int n = 4;
+        const int halfn = n>>1;
+        MatrixElem** orig = GenerateMatrix(n);
+        MatrixElem** matrix[4];
+        matrix[0] = AllocateMatrix(halfn);
+        matrix[1] = AllocateMatrix(halfn);
+        matrix[2] = AllocateMatrix(halfn);
+        matrix[3] = AllocateMatrix(halfn);
+
+        SubDivideMatrix(n,orig,matrix);
+        PrintMatrix(n,orig);
+        PrintMatrixSideBySide(halfn,matrix[0],matrix[1],'|');
+        PrintMatrixSideBySide(halfn,matrix[2],matrix[3],'|');
+
+        DeleteMatrix(n,orig);
+        DeleteMatrix(halfn,matrix[0]);
+        DeleteMatrix(halfn,matrix[1]);
+        DeleteMatrix(halfn,matrix[2]);
+        DeleteMatrix(halfn,matrix[3]);
+    }
+
+    /// Test Multiplication
+    {
+        cout << "Test Multiplication ==========================\n\n";
+        const int n = 4;
+        MatrixElem** m1 = AllocateMatrix(n);
+        MatrixElem** m2 = AllocateMatrix(n);
+        MatrixElem** res = AllocateMatrix(n);
+        MatrixElem** expectedRes = AllocateMatrix(n);
+
+        int m1Val[] = {1, 2, 3, 4,/*;*/ 2, 1, 2, 3,/*;*/ 3, 2, 1, 2,/*;*/ 4, 3, 2, 1};
+        int m2Val[] = {4,3,2,1/*;*/,3,4,3,2/*;*/,2,3,4,3/*;*/,1,2,3,4};
+        int expectedVal[] = {20,28,32,30/**/,18,22,24,22/**/,22,24,22,18/**/,30,32,28,20};
+
+        for(int i=0; i<n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                m1[i][j] = m1Val[i*n+j];
+                m2[i][j] = m2Val[i*n+j];
+                expectedRes[i][j] = expectedVal[i*n+j];
+            }
+        }
+
+        MultMatrixBasicPreprocess(n,m1,m2,res);
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                if(res[i][j] != expectedRes[i][j])
+                {
+                    cout << "ERROR in Basic Multiplication";
+                    PrintMatrixSideBySide(n,m1,m2,'*');
+                    PrintMatrixSideBySide(n,res,expectedRes,'!');
+
+                    goto STOPTEST;
+                }
+            }
+        }
+
+        Strassen(n,m1,m2,res);
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                if(res[i][j] != expectedRes[i][j])
+                {
+                    cout << "ERROR in Strassen Multiplication";
+                    PrintMatrixSideBySide(n,m1,m2,'*');
+                    PrintMatrixSideBySide(n,res,expectedRes,'!');
+
+                    goto STOPTEST;
+                }
+            }
+        }
+
+STOPTEST:
+
+        DeleteMatrix(n,m1);
+        DeleteMatrix(n,m2);
+        DeleteMatrix(n,res);
+        DeleteMatrix(n,expectedRes);
+    }
+
+    Pause();
+}
+
+void FindCutOff()
+{
+    const int nPower = 10;
+    const int n = 1<<nPower;
+    CutOff = 1<<9;
+
+    float previousTime = 99999999.f;
+
+    bool forward = false;
+
+    while(CutOff > 0)
+    {
+        float time = ExecuteMultiplication(nPower,Strassen);
+        if(time < previousTime)
+        {
+        }
+        else
+        {
+            forward = !forward;
+        }
+
+        printf("CutOff = %d\ntime=%f\nprevious=%f\n\n",CutOff,time,previousTime);
+        if(forward)
+        {
+            CutOff = CutOff<<1;
+
+        }
+        else
+        {
+            CutOff = CutOff>>1;
+        }
+        previousTime = time;
+
+    }
+
+
+
+    Pause();
+}
+
+
+
+int main(int argc, char** argv)
+{
+    int nInit = 5, nFinal = 5;
+    if(argc > 1)
+    {
+        if(strcmp(argv[1],"tests") == 0)
+        {
+            Tests();
+            return 0;
+        }
+        else if(strcmp(argv[1],"cutoff") == 0)
+        {
+            FindCutOff();
+            return 0;
+        }
+        nInit = atoi(argv[1]);
+        nFinal = nInit;
+        if(argc>2)
+        {
+            // make sure nFinal is bigger than nInit
+            nFinal = max(nFinal,atoi(argv[2]));
+            // make sure 2^nFinal fits in a 32bits integer
+            nFinal = min(nFinal,31);
+        }
+    }
+
+    ofstream log("result.txt",ios::out);
+    bool logging = !log.fail();
+
+
+    int nPower = nInit;
+    {
+        char buffer[256];
+        sprintf(buffer,"\t\tN\t\tBasic\t\t\tStrassen(%d)\t\tStrassen(%d)\t\tStrassen(%d)\t\tStrassen(1)\n",CutOff,CutOff>>1,CutOff<<1);
+        if(logging)
+        {
+            log << buffer;
+        }
+        cout << buffer;
+    }
+
+    while(nPower <= nFinal)
+    {
+        CutOff = CutOffDefault;
+
+        float meanTime = ExecuteMultiplication(nPower,MultMatrixBasicPreprocess);
+        float meanTime2 = ExecuteMultiplication(nPower,Strassen);
+        // With half the cutoff
+        CutOff = CutOff>>1;
+        float meanTime3 = ExecuteMultiplication(nPower,Strassen);
+
+        // With double Cutoff
+        CutOff = CutOff<<2;
+        float meanTime4 = ExecuteMultiplication(nPower,Strassen);
+
+        // With Cutoff of 1
+        CutOff = 1;
+        float meanTime5 = ExecuteMultiplication(nPower,Strassen);
+
+        char buffer[256];
+        sprintf(buffer,"\t\t%d\t\t%f\t\t%f\t\t%f\t\t%f\t\t%f\n",nPower,meanTime,meanTime2,meanTime3,meanTime4,meanTime5);
+        if(logging)
+        {
+            log << buffer;
+        }
+        cout << buffer;
+        ++nPower;
+    }
+    log.close();
+
+    Pause();
+    return 0;
+}
+
+float ExecuteMultiplication( int nPower, MultiplicationFunction func )
+{
+    vector<MatrixElem**> matrix; 
+    float nbMult = 0;
+    float meanTime = 0;
+    const int n = 1<<nPower;
+
+    for(int x=1; x<=5; ++x)
+    {
+        char filename[32];
+        sprintf_s(filename,"data/ex_n%d.%d",nPower,x);
+        MatrixElem** m = ReadMatrixFromFile(filename);
+
+        if(!m)
+        {
+            m = GenerateMatrix(n);
+        }
+
+        if(m)
+        {
+            for(int iMatrix=0; iMatrix<(int)matrix.size(); ++iMatrix)
+            {
+                MatrixElem** r = AllocateMatrix(n);
+                clock_t t = clock();
+                // important to have new matrix on the right because it can be transpose if optim
+                func(n,matrix[iMatrix],m,r);
+                t = clock() - t;
+
+                DeleteMatrix(n,r);
+                meanTime += (float)t/1000.f;
+                ++nbMult;
+            }
+            matrix.push_back(m);
+        }
+    }
+
+    // Cleanup
+    while(!matrix.empty())
+    {
+        MatrixElem** m = matrix.back();
+        matrix.pop_back();
+        DeleteMatrix(n, m);
+    }
+
+    return nbMult!= 0? meanTime/nbMult : 0;
+}
+
+
 
 // if USE_TRANSPOSE  m2 must be transposed from its original form => m2 = m2t
 int MultMatrixBasic(const int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix)
@@ -270,255 +540,3 @@ int Strassen(int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix)
 
     return 1;
 }
-
-/// Tests to validate functions and algo
-void Tests()
-{
-    ///////////////
-    // Test Sum  Sub
-    ///////////////
-    {
-        cout << "Test Sum ==========================\n\n";
-        const int n = 2;
-        MatrixElem** m1 = GenerateMatrix(n), 
-            **m2 = GenerateMatrix(n),
-            **r = AllocateMatrix(n);
-        SumMatrix(n,m1,m2,r);
-        PrintMatrixSideBySide(n,m1,m2,'+');
-        PrintMatrix(n,r);
-        cout << "Test Sub ==========================\n\n";
-        PrintMatrixSideBySide(n,r,m2,'-');
-        SubstractMatrix(n,r,m2,r);
-        PrintMatrix(n,r);
-
-        for(int i=0; i<n; ++i)
-        {
-            for(int j=0; j<n; ++j)
-            {
-                if(r[i][j] != m1[i][j])
-                {
-                    cout << "ERROR in sub|sum\n\n";
-                    break;
-                }
-            }
-        }
-        DeleteMatrix(n,m1);
-        DeleteMatrix(n,m2);
-        DeleteMatrix(n,r);
-    }
-
-    ///////////////
-    // Test SubMatrix
-    ///////////////
-    {
-        cout << "Test SubMatrix ==========================\n\n";
-        const int n = 4;
-        const int halfn = n>>1;
-        MatrixElem** orig = GenerateMatrix(n);
-        MatrixElem** matrix[4];
-        matrix[0] = AllocateMatrix(halfn);
-        matrix[1] = AllocateMatrix(halfn);
-        matrix[2] = AllocateMatrix(halfn);
-        matrix[3] = AllocateMatrix(halfn);
-
-        SubDivideMatrix(n,orig,matrix);
-        PrintMatrix(n,orig);
-        PrintMatrixSideBySide(halfn,matrix[0],matrix[1],'|');
-        PrintMatrixSideBySide(halfn,matrix[2],matrix[3],'|');
-
-        DeleteMatrix(n,orig);
-        DeleteMatrix(halfn,matrix[0]);
-        DeleteMatrix(halfn,matrix[1]);
-        DeleteMatrix(halfn,matrix[2]);
-        DeleteMatrix(halfn,matrix[3]);
-    }
-
-    /// Test Multiplication
-    {
-        cout << "Test Multiplication ==========================\n\n";
-        const int n = 4;
-        MatrixElem** m1 = AllocateMatrix(n);
-        MatrixElem** m2 = AllocateMatrix(n);
-        MatrixElem** res = AllocateMatrix(n);
-        MatrixElem** expectedRes = AllocateMatrix(n);
-
-        int m1Val[] = {1, 2, 3, 4,/*;*/ 2, 1, 2, 3,/*;*/ 3, 2, 1, 2,/*;*/ 4, 3, 2, 1};
-        int m2Val[] = {4,3,2,1/*;*/,3,4,3,2/*;*/,2,3,4,3/*;*/,1,2,3,4};
-        int expectedVal[] = {20,28,32,30/**/,18,22,24,22/**/,22,24,22,18/**/,30,32,28,20};
-
-        for(int i=0; i<n; ++i)
-        {
-            for (int j = 0; j < n; ++j)
-            {
-                m1[i][j] = m1Val[i*n+j];
-                m2[i][j] = m2Val[i*n+j];
-                expectedRes[i][j] = expectedVal[i*n+j];
-            }
-        }
-
-// #if USE_TRANSPOSE
-//         TransposeMatrix(n,m2);
-// #endif
-
-        MultMatrixBasicPreprocess(n,m1,m2,res);
-        for(int i=0; i<n; ++i)
-        {
-            for(int j=0; j<n; ++j)
-            {
-                if(res[i][j] != expectedRes[i][j])
-                {
-                    cout << "ERROR in Basic Multiplication";
-                    PrintMatrixSideBySide(n,m1,m2,'*');
-                    PrintMatrixSideBySide(n,res,expectedRes,'!');
-
-                    goto STOPTEST;
-                }
-            }
-        }
-
-        Strassen(n,m1,m2,res);
-        for(int i=0; i<n; ++i)
-        {
-            for(int j=0; j<n; ++j)
-            {
-                if(res[i][j] != expectedRes[i][j])
-                {
-                    cout << "ERROR in Strassen Multiplication";
-                    PrintMatrixSideBySide(n,m1,m2,'*');
-                    PrintMatrixSideBySide(n,res,expectedRes,'!');
-
-                    goto STOPTEST;
-                }
-            }
-        }
-
-STOPTEST:
-
-        DeleteMatrix(n,m1);
-        DeleteMatrix(n,m2);
-        DeleteMatrix(n,res);
-        DeleteMatrix(n,expectedRes);
-    }
-
-    Pause();
-}
-
-void FindCutOff()
-{
-    CutOff = 1<<8;
-
-    float previousTime = 99999999;
-    while(CutOff > 0)
-    {
-        float time = ExecuteMultiplication(10,Strassen);
-        if(time < previousTime)
-        {
-            CutOff = CutOff>>1;
-            printf("CutOff = %d\ntime=%f\nprevious=%f\n\n",CutOff,time,previousTime);
-            previousTime = time;
-        }
-        else
-        {
-            CutOff = CutOff<<1;
-            printf("CutOff = %d\ntime=%f\nprevious=%f\n\n",CutOff,time,previousTime);
-        }
-        
-    }
-
-
-
-    Pause();
-}
-
-
-
-int main(int argc, char** argv)
-{
-    int nInit = 5, nFinal = 5;
-    if(argc > 1)
-    {
-        if(strcmp(argv[1],"tests") == 0)
-        {
-            Tests();
-            return 0;
-        }
-        else if(strcmp(argv[1],"cutoff") == 0)
-        {
-            FindCutOff();
-            return 0;
-        }
-        nInit = atoi(argv[1]);
-        nFinal = nInit;
-        if(argc>2)
-        {
-            // make sure nFinal is bigger than nInit
-            nFinal = max(nFinal,atoi(argv[2]));
-            // make sure 2^nFinal fits in a 32bits integer
-            nFinal = min(nFinal,31);
-        }
-    }
-
-    int nPower = nInit;
-    printf("\t\tN\t\tBasic\n");
-    while(nPower <= nFinal)
-    {
-        float meanTime = ExecuteMultiplication(nPower,MultMatrixBasicPreprocess);
-        printf("\t\t%d\t\t%f\n",nPower,meanTime);
-        ++nPower;
-    }
-
-
-    Pause();
-    return 0;
-}
-
-float ExecuteMultiplication( int nPower, MultiplicationFunction func )
-{
-    vector<MatrixElem**> matrix; 
-    float nbMult = 0;
-    float meanTime = 0;
-    const int n = 1<<nPower;
-
-    for(int x=1; x<=5; ++x)
-    {
-        char filename[32];
-        sprintf_s(filename,"data/ex_n%d.%d",nPower,x);
-        MatrixElem** m = ReadMatrixFromFile(filename
-#if USE_TRANSPOSE
-            ,false
-#endif
-            );
-
-        if(m)
-        {
-            for(int iMatrix=0; iMatrix<(int)matrix.size(); ++iMatrix)
-            {
-                MatrixElem** r = AllocateMatrix(n);
-                clock_t t = clock();
-                // important to have new matrix on the right because it can be transpose if optim
-                func(n,matrix[iMatrix],m,r);
-                t = clock() - t;
-
-                DeleteMatrix(n,r);
-                meanTime += (float)t/1000.f;
-                ++nbMult;
-            }
-// #if USE_TRANSPOSE
-//             TransposeMatrix(n, m);
-// #endif
-            matrix.push_back(m);
-        }
-    }
-
-    // Cleanup
-    while(!matrix.empty())
-    {
-        MatrixElem** m = matrix.back();
-        matrix.pop_back();
-        DeleteMatrix(n, m);
-    }
-
-    return nbMult!= 0? meanTime/nbMult : 0;
-}
-
-
