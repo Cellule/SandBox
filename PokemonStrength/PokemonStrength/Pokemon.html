@@ -16,29 +16,20 @@
     <article ng-controller="typeGameController" class="pkmGame">
         <section class="gameSection">
             <h1 class="gameTitle">Pokemon Type Game</h1>
-            <div class="typesDisplay">
-
-                <div ng-if="leftType" class="pkmType">
-                    <img ng-src="{{leftType.imgsrc}}" class="pkmTypeImg" />
-                    <div class="typeName">{{leftType.name}}</div>
-                </div>
-
-                <div class="typeDelimiter">
-                    <img ng-src="{{imgPath}}Versus_sign.png">
-                </div>
-
-                <div ng-if="rightType" class="pkmType">
-                    <img ng-src="{{rightType.imgsrc}}" class="pkmTypeImg" />
-                    <div class="typeName">{{rightType.name}}</div>
-                </div>
-                <span ng-if="dualType">
-                    <span class="dualTypeDelimiter">& </span>
-                    <div class="pkmType">
-                        <img ng-src="{{dualType.imgsrc}}" class="pkmTypeImg" />
-                        <div class="typeName">{{dualType.name}}</div>
-                    </div>
-                </span>
-            </div>
+            <table class="typesDisplay">
+                <tr>
+                    <td class="pkmType"><img ng-src="{{leftType.imgsrc}}" class="pkmTypeImg" /></td>
+                    <td class="vsSign"><img ng-src="{{imgPath}}Versus_sign.png" class="vsSignImg"></td>
+                    <td class="pkmType"><img ng-src="{{rightType.imgsrc}}" class="pkmTypeImg" /></td>
+                    <td class="pkmType" ng-if="dualType"><img ng-src="{{dualType.imgsrc}}" class="pkmTypeImg" /></td>
+                </tr>
+                <tr>
+                    <td><div class="typeName">{{leftType.name}}</div></td>
+                    <td></td>
+                    <td><div class="typeName">{{rightType.name}}</div></td>
+                    <td ng-if="dualType"><div class="typeName">{{dualType.name}}</div></td>
+                </tr>
+            </table>
             <div class="clear"></div>
 
             <div>
@@ -59,26 +50,20 @@
             <input type="integer" ng-model="historyLimit">
             <ul class="historyList">
                 <li ng-repeat="h in history | reverse | limitTo:historyLimit">
-                    <span ng-if="h.leftType" class="pkmTypeHistory">
-                        <img ng-src="{{h.leftType.imgsrc}}" class="pkmTypeImg" />
-                        <div class="typeName">{{h.leftType.name}}</div>
-                    </span>
-                    
-                    <div class="typeDelimiter">
-                        <img ng-src="{{imgPath}}Versus_sign.png">
-                    </div>
-                    
-                    <span ng-if="h.rightType" class="pkmTypeHistory">
-                        <img ng-src="{{h.rightType.imgsrc}}" class="pkmTypeImg" />
-                        <div class="typeName">{{h.rightType.name}}</div>
-                    </span>
-                    <span ng-if="h.dualType">
-                        <span class="dualTypeDelimiter">& </span>
-                        <div class="pkmTypeHistory">
-                            <img ng-src="{{h.dualType.imgsrc}}" class="pkmTypeImg" />
-                            <div class="typeName">{{h.dualType.name}}</div>
-                        </div>
-                    </span>
+                    <table class="typesDisplay">
+                        <tr>
+                            <td class="pkmTypeHistory"><img ng-src="{{h.leftType.imgsrc}}" class="pkmTypeImg" /></td>
+                            <td class="vsSignHistory"><img ng-src="{{imgPath}}Versus_sign.png" class="vsSignImg"></td>
+                            <td class="pkmTypeHistory"><img ng-src="{{h.rightType.imgsrc}}" class="pkmTypeImg" /></td>
+                            <td class="pkmTypeHistory" ng-if="h.dualType"><img ng-src="{{h.dualType.imgsrc}}" class="pkmTypeImg" /></td>
+                        </tr>
+                        <tr>
+                            <td><div class="typeName">{{h.leftType.name}}</div></td>
+                            <td></td>
+                            <td><div class="typeName">{{h.rightType.name}}</div></td>
+                            <td ng-if="h.dualType"><div class="typeName">{{h.dualType.name}}</div></td>
+                        </tr>
+                    </table>
                     <div>Answer:{{h.answer}} Solution:{{h.solution}} {{h.answer == h.solution | succesFilter}}</div>
                     <div class="clear"></div>
                 </li>
