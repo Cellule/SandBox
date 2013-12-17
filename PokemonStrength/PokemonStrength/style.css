@@ -1,0 +1,51 @@
+﻿.clear {
+    clear: both;
+}
+
+.gameSection {
+    float: left;
+    width: 500px;
+}
+
+.historySection {
+    float:left;
+}
+
+.typesDisplay {
+    height:100%;
+}
+
+.pkmType {
+    float:left;
+    width:100px;
+    height:150px;
+}
+
+.pkmTypeHistory {
+    float:left;
+    width:50px;
+    height:80px;
+}
+
+.pkmTypeImg {
+    width:100%;
+}
+
+.typeDelimiter {
+    float: left;
+    line-height:150px;
+}
+
+.dualTypeDelimiter {
+    float: left;
+    line-height:150px;
+}
+
+.typeName {
+    text-align:center;
+}
+
+
+.historyList {
+    list-style: none;
+}

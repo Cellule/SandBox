@@ -12,11 +12,24 @@ using namespace std;
 
 // Transpose, optimisation for concurrent reading of second matrix elements
 #define USE_TRANSPOSE 1
-#define USE_MULTITHREAD 0
+#define USE_MULTITHREAD 1
 
-
+#if USE_MULTITHREAD
+const int CutOffDefault = 512;
+#else
 const int CutOffDefault = 128;
+#endif
 int CutOff = CutOffDefault;
+
+
+#define BASIC 0
+#define STRASSEN 1
+#define STRASSEN_HALF 0
+#define STRASSEN_DOUBLE 0
+#define STRASSEN_1 0
+
+
+
 
 typedef int(*MultiplicationFunction)(int , MatrixElem** , MatrixElem** , MatrixElem** );
 
@@ -214,9 +227,9 @@ STOPTEST:
 
 void FindCutOff()
 {
-    const int nPower = 9;
-    const int n = 1<<nPower;
-    CutOff = 1<<9;
+    int nPower = 7;
+    int n = 1<<nPower;
+    CutOff = 1<<nPower;
 
     float previousTime = 99999999.f;
 
@@ -236,8 +249,18 @@ void FindCutOff()
         printf("CutOff = %d\ntime=%f\nprevious=%f\n\n",CutOff,time,previousTime);
         if(forward)
         {
-            CutOff = CutOff<<1;
-
+            if(CutOff == n)
+            {
+                // invalidate time and resume
+                n = n<<1;
+                ++nPower;
+                previousTime = 99999999.f;
+                forward = false;
+            }
+            else
+            {
+                CutOff = CutOff<<1;
+            }
         }
         else
         {
@@ -285,44 +308,59 @@ int main(int argc, char** argv)
 
 
     int nPower = nInit;
-    {
-        char buffer[256];
-        sprintf(buffer,"\t\tN\t\tBasic\t\t\tStrassen(%d)\t\tStrassen(%d)\t\tStrassen(%d)\t\tStrassen(1)\n",CutOff,CutOff>>1,CutOff<<1);
-        if(logging)
-        {
-            log << buffer;
-        }
-        cout << buffer;
-    }
+
+#define OutPut(X) cout << "\t\t" << X; if(logging) log << "\t\t" << X;
+        OutPut("N");
+#if BASIC
+        OutPut("Basic");
+#endif
+#if STRASSEN
+        OutPut("Strassen(" << CutOffDefault << ")");
+#endif
+#if STRASSEN_HALF
+        OutPut("Strassen(" << (CutOffDefault>>1) << ")");
+#endif
+#if STRASSEN_DOUBLE
+        OutPut("Strassen(" << (CutOffDefault<<1) << ")");
+#endif
+#if STRASSEN_1
+        OutPut("Strassen(1)");
+#endif    
+        OutPut(endl);
 
     while(nPower <= nFinal)
     {
-        CutOff = CutOffDefault;
-        cout << "\t\t" << nPower;
-        float meanTime = ExecuteMultiplication(nPower,MultMatrixBasicPreprocess);
-        cout << "\t\t" << meanTime;
-        float meanTime2 = ExecuteMultiplication(nPower,Strassen);
-        cout << "\t\t" << meanTime2;
-        // With half the cutoff
-        CutOff = CutOff>>1;
-        float meanTime3 = ExecuteMultiplication(nPower,Strassen);
-        cout << "\t\t" << meanTime3;
-        // With double Cutoff
-        CutOff = CutOff<<2;
-        float meanTime4 = ExecuteMultiplication(nPower,Strassen);
-        cout << "\t\t" << meanTime4;
-        // With Cutoff of 1
-        CutOff = 1;
-        float meanTime5 = ExecuteMultiplication(nPower,Strassen);
-        cout << "\t\t" << meanTime5;
-        char buffer[256];
-        sprintf(buffer,"\t\t%d\t\t%f\t\t%f\t\t%f\t\t%f\t\t%f\n",nPower,meanTime,meanTime2,meanTime3,meanTime4,meanTime5);
-        if(logging)
-        {
-            log << buffer;
+        OutPut(nPower);
+
+#define DoMultiplication(algo,cutoff)                               \
+        {                                                           \
+            CutOff = cutoff;                                        \
+            float meanTime = ExecuteMultiplication(nPower,algo);    \
+            OutPut(meanTime);                                       \
         }
-        cout << endl;
-        //cout << buffer;
+
+#if BASIC
+        // Basic multiplication
+        DoMultiplication(MultMatrixBasicPreprocess,1);
+#endif
+#if STRASSEN
+        // With calculated the cutoff
+        DoMultiplication(Strassen,CutOffDefault);
+#endif
+#if STRASSEN_HALF
+        // With half the cutoff
+        DoMultiplication(Strassen,CutOffDefault>>1);
+#endif
+#if STRASSEN_DOUBLE
+        // With double Cutoff
+        DoMultiplication(Strassen,CutOffDefault<<1);
+#endif
+#if STRASSEN_1
+        // With Cutoff of 1
+        DoMultiplication(Strassen,1);
+#endif       
+        
+        OutPut(endl);
         ++nPower;
     }
     log.close();

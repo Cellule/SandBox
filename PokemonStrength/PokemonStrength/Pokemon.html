@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="myApp">
+<head>
+    <title>Pokemon Type Game</title>
+    <link type="text/css" rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <script type="text/javascript" src="jquery-2.0.3.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="filters.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="controllers.js"></script>
+    <script type="text/javascript" src="services.js"></script>
+
+</head>
+<body>
+    <article ng-controller="typeGameController" class="pkmGame">
+        <section class="gameSection">
+            <h1 class="gameTitle">Pokemon Type Game</h1>
+            <div class="typesDisplay">
+
+                <div ng-if="leftType" class="pkmType">
+                    <img ng-src="{{leftType.imgsrc}}" class="pkmTypeImg" />
+                    <div class="typeName">{{leftType.name}}</div>
+                </div>
+
+                <div class="typeDelimiter">
+                    <img ng-src="{{imgPath}}Versus_sign.png">
+                </div>
+
+                <div ng-if="rightType" class="pkmType">
+                    <img ng-src="{{rightType.imgsrc}}" class="pkmTypeImg" />
+                    <div class="typeName">{{rightType.name}}</div>
+                </div>
+                <span ng-if="dualType">
+                    <span class="dualTypeDelimiter">& </span>
+                    <div class="pkmType">
+                        <img ng-src="{{dualType.imgsrc}}" class="pkmTypeImg" />
+                        <div class="typeName">{{dualType.name}}</div>
+                    </div>
+                </span>
+            </div>
+            <div class="clear"></div>
+
+            <div>
+                <button ng-click="choose(0)">x0</button>
+                <button ng-if="dualType" ng-click="choose(0.25)">x0.25</button>
+                <button ng-click="choose(0.5)">x0.5</button>
+                <button ng-click="choose(1)">x1</button>
+                <button ng-click="choose(2)">x2</button>
+                <button ng-if="dualType" ng-click="choose(4)">x4</button>
+            </div>
+            <div ng-if="success != null">{{success | succesFilter}}</div>
+        </section>
+        
+
+        <section class="historySection">
+            <h1 class="historyTitle">History</h1>
+            History Size:
+            <input type="integer" ng-model="historyLimit">
+            <ul class="historyList">
+                <li ng-repeat="h in history | reverse | limitTo:historyLimit">
+                    <span ng-if="h.leftType" class="pkmTypeHistory">
+                        <img ng-src="{{h.leftType.imgsrc}}" class="pkmTypeImg" />
+                        <div class="typeName">{{h.leftType.name}}</div>
+                    </span>
+                    
+                    <div class="typeDelimiter">
+                        <img ng-src="{{imgPath}}Versus_sign.png">
+                    </div>
+                    
+                    <span ng-if="h.rightType" class="pkmTypeHistory">
+                        <img ng-src="{{h.rightType.imgsrc}}" class="pkmTypeImg" />
+                        <div class="typeName">{{h.rightType.name}}</div>
+                    </span>
+                    <span ng-if="h.dualType">
+                        <span class="dualTypeDelimiter">& </span>
+                        <div class="pkmTypeHistory">
+                            <img ng-src="{{h.dualType.imgsrc}}" class="pkmTypeImg" />
+                            <div class="typeName">{{h.dualType.name}}</div>
+                        </div>
+                    </span>
+                    <div>Answer:{{h.answer}} Solution:{{h.solution}} {{h.answer == h.solution | succesFilter}}</div>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </section>
+    </article>
+</body>
+</html>
