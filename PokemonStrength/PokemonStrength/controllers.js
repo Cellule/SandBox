@@ -1,5 +1,7 @@
 var myApp = angular.module('myApp', ['gameFilters']);
 
+var debug = true;
+var imgPath = "res/img/";
 
 
 myApp.controller('typeGameController', function ($scope, $http) {
@@ -12,55 +14,75 @@ myApp.controller('typeGameController', function ($scope, $http) {
     $scope.historyLimit = 10;
     $scope.imgPath = imgPath;
 
+    $scope.availableGen = [{ name: "Gen II-V", path: '\\res\\charts\\gen2to5.json' }];
+    $scope.pathToGenFile = $scope.availableGen[0].path;
+    $scope.pkmTypes = [];
+
+
     $scope.$on('dataloaded', function () {
         setTimeout(function () {
             
         }, 0, false);
     });
 
-    $http.get('\\res\\charts\\gen2to5.json').success(function (pkmTypes) {
-        var nbType = pkmTypes.length;
+    $scope.requestTypes = function () {
+        $http.get($scope.pathToGenFile).success(function (pkmTypes) {
+            var nbType = pkmTypes.length;
 
-        var error = false;
-        if (debug) {
-            for (i in pkmTypes) {
-                var p = pkmTypes[i];
-                if (p.weakness.length != nbType) {
-                    alert("Error: {0} weakness list ({1}) doesn't match expected size ({2})".format(p.name, p.weakness.length, nbType));
-                    error = true;
+            var error = false;
+            if (debug) {
+                for (i in pkmTypes) {
+                    var p = pkmTypes[i];
+                    if (p.weakness.length != nbType) {
+                        alert("Error: {0} weakness list ({1}) doesn't match expected size ({2})".format(p.name, p.weakness.length, nbType));
+                        error = true;
+                    }
                 }
-            }
 
-            for (i in pkmTypes) {
-                var p = pkmTypes[i];
-                for (j in pkmTypes) {
-                    var p2 = pkmTypes[i];
+                for (i in pkmTypes) {
+                    var p = pkmTypes[i];
+                    for (j in pkmTypes) {
+                        var p2 = pkmTypes[i];
 
-                    for (k in pkmTypes) {
-                        var v = p.weakness[k] * p2.weakness[k];
-                        if (v < 0 || v > 4) {
-                            alert("Error: combo {0}&{1} weakness {2} equals {3}".format(p.name, p2.name, pkmTypes[k].name, v));
-                            error = true;
+                        for (k in pkmTypes) {
+                            var v = p.weakness[k] * p2.weakness[k];
+                            if (v < 0 || v > 4) {
+                                alert("Error: combo {0}&{1} weakness {2} equals {3}".format(p.name, p2.name, pkmTypes[k].name, v));
+                                error = true;
+                            }
                         }
                     }
                 }
             }
-        }
-        if (!error)
-        {
-            $scope.pkmTypes = data;
-        }
-    });
+
+            // fix path for images
+            for (i in pkmTypes) {
+                var p = pkmTypes[i];
+                p.imgsrc = imgPath + p.imgsrc;
+            }
+
+            if (!error) {
+                $scope.history = [];
+                $scope.pkmTypes = pkmTypes;
+                $scope.generateType();
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            alert('Generation file not found');
+        });
+    }
 
     $scope.generateType = function () {
         
-        $scope.leftType = chooseRandPkmType();
-        $scope.rightType = chooseRandPkmType();
+        $scope.leftType = chooseRandPkmType($scope.pkmTypes);
+        $scope.rightType = chooseRandPkmType($scope.pkmTypes);
         var r = Math.random();
         var a = $scope.rightType.weakness[$scope.leftType.type];
         if (r >= 0.8)
         {
-            $scope.dualType = chooseRandPkmType($scope.rightType);
+            $scope.dualType = chooseRandPkmType($scope.pkmTypes,$scope.rightType);
             a *= $scope.dualType.weakness[$scope.leftType.type];
             if (a < 0 || a> 4) {
                 alert("Error: combo {0}&{1} weakness {2} equals {3}".format($scope.rightType.name, $scope.dualType.name, $scope.leftType.name, a));
@@ -95,6 +117,5 @@ myApp.controller('typeGameController', function ($scope, $http) {
 
     }
 
-    $scope.generateType();
-
+    $scope.requestTypes();
 });

@@ -102,9 +102,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="res\charts\gen2to5.json">
-      <BrowseToURL>res/charts/gen2to5.json</BrowseToURL>
-    </Content>
+    <Content Include="res\charts\gen2to5.json" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

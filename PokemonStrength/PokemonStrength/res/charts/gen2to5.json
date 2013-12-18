@@ -1,105 +1,104 @@
 [
     {
-        name: "Normal",
-        type: 0,
-        imgsrc: "normal.png",
-        weakness: [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+        "name": "Normal",
+        "type": 0,
+        "imgsrc": "normal.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1]
     },
     {
-        name: "Fire",
-        type: pkmTypesEnum.TypeFire,
-        imgsrc: imgPath+"fire.png",
-        weakness: [1, 0.5, 2, 1, 0.5, 0.5, 1, 1, 2, 1, 1, 0.5, 2, 1, 1, 1, 0.5]
+        "name": "Fire",
+        "type": 1,
+        "imgsrc": "fire.png",
+        "weakness": [1, 0.5, 2, 1, 0.5, 0.5, 1, 1, 2, 1, 1, 0.5, 2, 1, 1, 1, 0.5]
     },
     {
-        name: "Water",
-        type: pkmTypesEnum.TypeWater,
-        imgsrc: imgPath+"water.png",
-        weakness: [1, 0.5, 0.5, 2, 2, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5]
+        "name": "Water",
+        "type": 2,
+        "imgsrc": "water.png",
+        "weakness": [1, 0.5, 0.5, 2, 2, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5]
     },
     {
-        name: "Electric",
-        type: pkmTypesEnum.TypeElectric,
-        imgsrc: imgPath+"electric.png",
-        weakness: [1, 1, 1, 0.5, 1, 1, 1, 1, 2, 0.5, 1, 1, 1, 1, 1, 1, 0.5]
+        "name": "Electric",
+        "type": 3,
+        "imgsrc": "electric.png",
+        "weakness": [1, 1, 1, 0.5, 1, 1, 1, 1, 2, 0.5, 1, 1, 1, 1, 1, 1, 0.5]
     },
     {
-        name: "Grass",
-        type: pkmTypesEnum.TypeGrass,
-        imgsrc: imgPath+"grass.png",
-        weakness: [1, 2, 0.5, 0.5, 0.5, 2, 1, 2, 0.5, 2, 1, 2, 1, 1, 1, 1, 1]
+        "name": "Grass",
+        "type": 4,
+        "imgsrc": "grass.png",
+        "weakness": [1, 2, 0.5, 0.5, 0.5, 2, 1, 2, 0.5, 2, 1, 2, 1, 1, 1, 1, 1]
     },
     {
-        name: "Ice",
-        type: pkmTypesEnum.TypeIce,
-        imgsrc: imgPath+"ice.png",
-        weakness: [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2]
+        "name": "Ice",
+        "type": 5,
+        "imgsrc": "ice.png",
+        "weakness": [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2]
     },
     {
-        name: "Fighting",
-        type: pkmTypesEnum.TypeFighting,
-        imgsrc: imgPath+"fighting.png",
-        weakness: [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0.5, 0.5, 1, 1, 0.5, 1]
+        "name": "Fighting",
+        "type": 6,
+        "imgsrc": "fighting.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0.5, 0.5, 1, 1, 0.5, 1]
     },
     {
-        name: "Poison",
-        type: pkmTypesEnum.TypePoison,
-        imgsrc: imgPath+"poison.png",
-        weakness: [1, 1, 1, 1, 0.5, 1, 0.5, 0.5, 2, 1, 2, 0.5, 1, 1, 1, 1, 1]
-    },
-
-    {
-        name: "Ground",
-        type: pkmTypesEnum.TypeGround,
-        imgsrc: imgPath+"ground.png",
-        weakness: [1, 1, 2, 0, 2, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 1, 1, 1, 1]
+        "name": "Poison",
+        "type": 7,
+        "imgsrc": "poison.png",
+        "weakness": [1, 1, 1, 1, 0.5, 1, 0.5, 0.5, 2, 1, 2, 0.5, 1, 1, 1, 1, 1]
     },
     {
-        name: "Flying",
-        type: pkmTypesEnum.TypeFlying,
-        imgsrc: imgPath+"flying.png",
-        weakness: [1, 1, 1, 2, 0.5, 2, 0.5, 1, 0, 1, 1, 0.5, 2, 1, 1, 1, 1]
+        "name": "Ground",
+        "type": 8,
+        "imgsrc": "ground.png",
+        "weakness": [1, 1, 2, 0, 2, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 1, 1, 1, 1]
     },
     {
-        name: "Psychic",
-        type: pkmTypesEnum.TypePsychic,
-        imgsrc: imgPath+"psychic.png",
-        weakness: [1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0.5, 2, 1, 2, 1, 2, 1]
+        "name": "Flying",
+        "type": 9,
+        "imgsrc": "flying.png",
+        "weakness": [1, 1, 1, 2, 0.5, 2, 0.5, 1, 0, 1, 1, 0.5, 2, 1, 1, 1, 1]
     },
     {
-        name: "Bug",
-        type: pkmTypesEnum.TypeBug,
-        imgsrc: imgPath+"bug.png",
-        weakness: [1, 2, 1, 1, 0.5, 1, 0.5, 1, 0.5, 2, 1, 1, 2, 1, 1, 1, 1]
+        "name": "Psychic",
+        "type": 10,
+        "imgsrc": "psychic.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0.5, 2, 1, 2, 1, 2, 1]
     },
     {
-        name: "Rock",
-        type: pkmTypesEnum.TypeRock,
-        imgsrc: imgPath+"rock.png",
-        weakness: [0.5, 0.5, 2, 1, 2, 1, 2, 0.5, 2, 0.5, 1, 1, 1, 1, 1, 1, 2]
+        "name": "Bug",
+        "type": 11,
+        "imgsrc": "bug.png",
+        "weakness": [1, 2, 1, 1, 0.5, 1, 0.5, 1, 0.5, 2, 1, 1, 2, 1, 1, 1, 1]
     },
     {
-        name: "Ghost",
-        type: pkmTypesEnum.TypeGhost,
-        imgsrc: imgPath+"ghost.png",
-        weakness: [0, 1, 1, 1, 1, 1, 0, 0.5, 1, 1, 1, 0.5, 1, 2, 1, 2, 1]
+        "name": "Rock",
+        "type": 12,
+        "imgsrc": "rock.png",
+        "weakness": [0.5, 0.5, 2, 1, 2, 1, 2, 0.5, 2, 0.5, 1, 1, 1, 1, 1, 1, 2]
     },
     {
-        name: "Dragon",
-        type: pkmTypesEnum.TypeDragon,
-        imgsrc: imgPath+"dragon.png",
-        weakness: [1, 0.5, 0.5, 0.5, 0.5, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1]
+        "name": "Ghost",
+        "type": 13,
+        "imgsrc": "ghost.png",
+        "weakness": [0, 1, 1, 1, 1, 1, 0, 0.5, 1, 1, 1, 0.5, 1, 2, 1, 2, 1]
     },
     {
-        name: "Dark",
-        type: pkmTypesEnum.TypeDark,
-        imgsrc: imgPath+"dark.png",
-        weakness: [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 2, 1, 0.5, 1, 0.5, 1]
+        "name": "Dragon",
+        "type": 14,
+        "imgsrc": "dragon.png",
+        "weakness": [1, 0.5, 0.5, 0.5, 0.5, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1]
     },
     {
-        name: "Steel",
-        type: pkmTypesEnum.TypeSteel,
-        imgsrc: imgPath+"steel.png",
-        weakness: [0.5, 2, 1, 1, 0.5, 0.5, 2, 0, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+        "name": "Dark",
+        "type": 15,
+        "imgsrc": "dark.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 2, 1, 0.5, 1, 0.5, 1]
+    },
+    {
+        "name": "Steel",
+        "type": 16,
+        "imgsrc": "steel.png",
+        "weakness": [0.5, 2, 1, 1, 0.5, 0.5, 2, 0, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
     }
-];
+]

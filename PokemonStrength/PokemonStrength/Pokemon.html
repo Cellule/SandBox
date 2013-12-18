@@ -40,6 +40,11 @@
                 <button ng-click="choose(2)">x2</button>
                 <button ng-if="dualType" ng-click="choose(4)">x4</button>
             </div>
+            <div>
+                <select ng-model="pathToGenFile" ng-options="item.path as item.name for item in availableGen" ng-change="requestTypes()">
+                </select>
+
+            </div>
         </section>
 
         <section class="historySection">
