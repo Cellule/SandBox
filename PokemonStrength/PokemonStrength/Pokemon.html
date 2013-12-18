@@ -32,7 +32,7 @@
             </table>
             <div class="clear"></div>
 
-            <div>
+            <div class="choices">
                 <button ng-click="choose(0)">x0</button>
                 <button ng-if="dualType" ng-click="choose(0.25)">x0.25</button>
                 <button ng-click="choose(0.5)">x0.5</button>
@@ -40,16 +40,14 @@
                 <button ng-click="choose(2)">x2</button>
                 <button ng-if="dualType" ng-click="choose(4)">x4</button>
             </div>
-            <div ng-if="success != null">{{success | succesFilter}}</div>
         </section>
-        
 
         <section class="historySection">
             <h1 class="historyTitle">History</h1>
             History Size:
             <input type="integer" ng-model="historyLimit">
-            <ul class="historyList">
-                <li ng-repeat="h in history | reverse | limitTo:historyLimit">
+            <div class="historyList">
+                <div class="historyItem" ng-repeat="h in history | reverse | limitTo:historyLimit">
                     <table class="typesDisplay">
                         <tr>
                             <td class="pkmTypeHistory"><img ng-src="{{h.leftType.imgsrc}}" class="pkmTypeImg" /></td>
@@ -64,10 +62,9 @@
                             <td ng-if="h.dualType"><div class="typeName">{{h.dualType.name}}</div></td>
                         </tr>
                     </table>
-                    <div>Answer:{{h.answer}} Solution:{{h.solution}} {{h.answer == h.solution | succesFilter}}</div>
-                    <div class="clear"></div>
-                </li>
-            </ul>
+                    <div class="historyResult">Answer:x{{h.answer}} {{h.answer == h.solution | succesFilter}}  Solution:x{{h.solution}} </div>
+                </div>
+            </div>
         </section>
     </article>
 </body>

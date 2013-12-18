@@ -28,6 +28,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
+    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,6 +64,25 @@
     <Content Include="controllers.js" />
     <Content Include="filters.js" />
     <Content Include="Pokemon.html" />
+    <Content Include="res\img\bug.png" />
+    <Content Include="res\img\dark.png" />
+    <Content Include="res\img\dragon.png" />
+    <Content Include="res\img\electric.png" />
+    <Content Include="res\img\fighting.png" />
+    <Content Include="res\img\fire.png" />
+    <Content Include="res\img\flying.png" />
+    <Content Include="res\img\ghost.png" />
+    <Content Include="res\img\grass.png" />
+    <Content Include="res\img\ground.png" />
+    <Content Include="res\img\ice.png" />
+    <Content Include="res\img\normal.png" />
+    <Content Include="res\img\poison.png" />
+    <Content Include="res\img\PokeTypes.png" />
+    <Content Include="res\img\psychic.png" />
+    <Content Include="res\img\rock.png" />
+    <Content Include="res\img\steel.png" />
+    <Content Include="res\img\Versus_sign.png" />
+    <Content Include="res\img\water.png" />
     <Content Include="script.js" />
     <Content Include="services.js" />
     <Content Include="style.css" />
@@ -69,14 +90,37 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\charts\gen2to5.json">
+      <BrowseToURL>res/charts/gen2to5.json</BrowseToURL>
+    </Content>
+    <Content Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -91,7 +135,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>28723</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:32776/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -11,6 +11,14 @@
     float:left;
 }
 
+.typesDisplay {
+    margin: auto;
+}
+
+.choices {
+    display:table;
+    margin:auto;
+}
 
 .pkmType {
     width:100px;
@@ -50,4 +58,13 @@
 
 .historyList {
     list-style: none;
+}
+
+.historyItem {
+    border: solid purple 5px;
+    border-radius: 5px;
+}
+
+.historyResult {
+    text-align:center;
 }
