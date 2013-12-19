@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Normal",
+        "type": 0,
+        "imgsrc": "normal.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1]
+    },
+    {
+        "name": "Fire",
+        "type": 1,
+        "imgsrc": "fire.png",
+        "weakness": [1, 0.5, 2, 1, 0.5, 1, 1, 1, 2, 1, 1, 0.5, 2, 1, 1]
+    },
+    {
+        "name": "Water",
+        "type": 2,
+        "imgsrc": "water.png",
+        "weakness": [1, 0.5, 0.5, 2, 2, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    },
+    {
+        "name": "Electric",
+        "type": 3,
+        "imgsrc": "electric.png",
+        "weakness": [1, 1, 1, 0.5, 1, 1, 1, 1, 2, 0.5, 1, 1, 1, 1, 1]
+    },
+    {
+        "name": "Grass",
+        "type": 4,
+        "imgsrc": "grass.png",
+        "weakness": [1, 2, 0.5, 0.5, 0.5, 2, 1, 2, 0.5, 2, 1, 2, 1, 1, 1]
+    },
+    {
+        "name": "Ice",
+        "type": 5,
+        "imgsrc": "ice.png",
+        "weakness": [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 2, 1, 1]
+    },
+    {
+        "name": "Fighting",
+        "type": 6,
+        "imgsrc": "fighting.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0.5, 0.5, 1, 1]
+    },
+    {
+        "name": "Poison",
+        "type": 7,
+        "imgsrc": "poison.png",
+        "weakness": [1, 1, 1, 1, 0.5, 1, 0.5, 0.5, 2, 1, 2, 2, 1, 1, 1]
+    },
+    {
+        "name": "Ground",
+        "type": 8,
+        "imgsrc": "ground.png",
+        "weakness": [1, 1, 2, 0, 2, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 1, 1]
+    },
+    {
+        "name": "Flying",
+        "type": 9,
+        "imgsrc": "flying.png",
+        "weakness": [1, 1, 1, 2, 0.5, 2, 0.5, 1, 0, 1, 1, 0.5, 2, 1, 1]
+    },
+    {
+        "name": "Psychic",
+        "type": 10,
+        "imgsrc": "psychic.png",
+        "weakness": [1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0.5, 2, 1, 0, 1]
+    },
+    {
+        "name": "Bug",
+        "type": 11,
+        "imgsrc": "bug.png",
+        "weakness": [1, 2, 1, 1, 0.5, 1, 0.5, 2, 0.5, 2, 1, 1, 2, 1, 1]
+    },
+    {
+        "name": "Rock",
+        "type": 12,
+        "imgsrc": "rock.png",
+        "weakness": [0.5, 0.5, 2, 1, 2, 1, 2, 0.5, 2, 0.5, 1, 1, 1, 1, 1]
+    },
+    {
+        "name": "Ghost",
+        "type": 13,
+        "imgsrc": "ghost.png",
+        "weakness": [0, 1, 1, 1, 1, 1, 0, 0.5, 1, 1, 1, 0.5, 1, 2, 1]
+    },
+    {
+        "name": "Dragon",
+        "type": 14,
+        "imgsrc": "dragon.png",
+        "weakness": [1, 0.5, 0.5, 0.5, 0.5, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+    }
+]

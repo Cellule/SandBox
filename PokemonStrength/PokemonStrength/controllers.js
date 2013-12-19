@@ -14,7 +14,11 @@ myApp.controller('typeGameController', function ($scope, $http) {
     $scope.historyLimit = 10;
     $scope.imgPath = imgPath;
 
-    $scope.availableGen = [{ name: "Gen II-V", path: '\\res\\charts\\gen2to5.json' }];
+    $scope.availableGen = [
+        { name: "Gen I", path: '\\res\\charts\\gen1.json' },
+        { name: "Gen II-V", path: '\\res\\charts\\gen2to5.json' },
+        { name: "Gen VI", path: '\\res\\charts\\gen6.json' }
+    ];
     $scope.pathToGenFile = $scope.availableGen[0].path;
     $scope.pkmTypes = [];
 
