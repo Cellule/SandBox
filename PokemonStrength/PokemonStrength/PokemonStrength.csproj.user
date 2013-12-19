@@ -8,7 +8,7 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <StartPageUrl>Pokemon.html</StartPageUrl>
-          <StartAction>Program</StartAction>
+          <StartAction>CurrentPage</StartAction>
           <AspNetDebugging>True</AspNetDebugging>
           <SilverlightDebugging>False</SilverlightDebugging>
           <NativeDebugging>False</NativeDebugging>
@@ -17,7 +17,8 @@
           <StartExternalURL>
           </StartExternalURL>
           <StartCmdLineArguments>/K node web-server.js; pause</StartCmdLineArguments>
-          <StartWorkingDirectory>\</StartWorkingDirectory>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
           <EnableENC>False</EnableENC>
           <AlwaysStartWebServerOnDebug>True</AlwaysStartWebServerOnDebug>
         </WebProjectProperties>

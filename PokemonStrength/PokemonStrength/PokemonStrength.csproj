@@ -59,10 +59,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="angular.js" />
-    <Content Include="app.js" />
-    <Content Include="controllers.js" />
-    <Content Include="filters.js" />
     <Content Include="Pokemon.html" />
     <Content Include="res\img\bug.png" />
     <Content Include="res\img\dark.png" />
@@ -83,8 +79,17 @@
     <Content Include="res\img\steel.png" />
     <Content Include="res\img\Versus_sign.png" />
     <Content Include="res\img\water.png" />
-    <Content Include="script.js" />
-    <Content Include="services.js" />
+    <Content Include="res\js\angular\angular.js" />
+    <Content Include="res\js\angular\angular.min.js" />
+    <Content Include="res\js\app.js" />
+    <Content Include="res\js\controllers.js" />
+    <Content Include="res\js\elementQuery\elementQuery.js" />
+    <Content Include="res\js\elementQuery\elementQuery.min.js" />
+    <Content Include="res\js\elementQuery\external\sizzle.js" />
+    <Content Include="res\js\filters.js" />
+    <Content Include="res\js\jQuery\jquery-2.0.3.js" />
+    <Content Include="res\js\script.js" />
+    <Content Include="res\js\services.js" />
     <Content Include="style.css" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +99,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="res\js\angular\angular.min.js.map" />
+    <Content Include="res\js\jQuery\jquery-2.0.3.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
