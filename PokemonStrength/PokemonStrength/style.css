@@ -7,7 +7,7 @@
 /*Pokemon type game Style*/
 
 #pkmGame[max-width~="299px"] {
-    font-size:8px;
+    /*font-size:10px;*/
 }
 
 /********************************************/
@@ -63,9 +63,11 @@
 }
 .pkmType {
     width:25%;
+    display:inline-block;
 }
 .vsSign{
     width:15%;
+    display:inline-block;
 }
 .pkmTypeImg {
     width:100%;
