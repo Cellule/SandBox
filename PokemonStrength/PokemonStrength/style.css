@@ -6,6 +6,10 @@
 /********************************************/
 /*Pokemon type game Style*/
 
+.pkmGame[max-width~="299px"] {
+    font-size:8px;
+}
+
 /********************************************/
 /*Section for the game*/
 .gameSection {
@@ -22,14 +26,7 @@
     display:table;
     margin:auto;
 }
-.pkmType, .pkmTypeHistory {
-    width:25%;
-    /*height:100px;*/
-}
-.vsSign, .vsSignHistory{
-    width:15%;
-    /*height:35px;*/
-}
+
 /********************************************/
 /*Section for the history*/
 .historySection {
@@ -41,17 +38,7 @@
     width:100%;
     float:none;
 }
-.pkmGame[max-width~="299px"] {
-    font-size:8px;
-}
-/*.pkmTypeHistory {
-    width:50px;
-    height:50px;
-}
-.vsSignHistory{
-    width:25px;
-    height:17px;
-}*/
+
 .historyList {
     list-style: none;
 }
@@ -68,6 +55,12 @@
 /*Common style for the game*/
 .typesDisplay {
     margin: auto;
+}
+.pkmType {
+    width:25%;
+}
+.vsSign{
+    width:15%;
 }
 .pkmTypeImg {
     width:100%;
