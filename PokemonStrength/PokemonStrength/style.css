@@ -6,21 +6,26 @@
 /********************************************/
 /*Pokemon type game Style*/
 
-.pkmGame[max-width~="299px"] {
+#pkmGame[max-width~="299px"] {
     font-size:8px;
 }
 
 /********************************************/
 /*Section for the game*/
-.gameSection {
+#gameSection {
+    width:100%;
+}
+
+#gameSection.withHistory {
     float: left;
     width: 60%;
 }
 /*When the article is too small take all the room*/
-.pkmGame[max-width~="299px"] .gameSection {
+#pkmGame[max-width~="299px"] #gameSection.withHistory {
     width:100%;
     float:none;
 }
+
 
 .choices {
     display:table;
@@ -34,7 +39,7 @@
     width:40%;
 }
 /*When the article is too small take all the room and go under*/
-.pkmGame[max-width~="299px"] .historySection {
+#pkmGame[max-width~="299px"] .historySection {
     width:100%;
     float:none;
 }

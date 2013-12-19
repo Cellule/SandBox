@@ -14,9 +14,9 @@
 
 </head>
 <body>
-    <div style="width: 500px;">
-        <article ng-controller="typeGameController" class="pkmGame">
-            <section class="gameSection">
+    <div style="width: 250px;">
+        <article ng-controller="typeGameController" id="pkmGame">
+            <section id="gameSection" class="withHistory">
                 <h1 class="gameTitle">Pokemon Type Game</h1>
                 <table class="typesDisplay">
                     <tr>
@@ -55,11 +55,12 @@
                 <div>
                     <select ng-model="pathToGenFile" ng-options="item.path as item.name for item in availableGen" ng-change="requestTypes()">
                     </select>
-
+                    Show history:
+                    <input type="checkbox" ng-model="showHistory" id="showHistory" ng-change="historyDisplayChange()"/>
                 </div>
             </section>
 
-            <section class="historySection">
+            <section class="historySection" ng-if="showHistory">
                 <h1 class="historyTitle">History</h1>
                 History Size:
             <input type="integer" ng-model="historyLimit" style="width:20px;">

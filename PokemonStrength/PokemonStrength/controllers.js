@@ -13,6 +13,7 @@ myApp.controller('typeGameController', function ($scope, $http) {
     $scope.history = [];
     $scope.historyLimit = 10;
     $scope.imgPath = imgPath;
+    $scope.showHistory = true;
 
     $scope.availableGen = [
         { name: "Gen I", path: '\\res\\charts\\gen1.json' },
@@ -119,6 +120,11 @@ myApp.controller('typeGameController', function ($scope, $http) {
         };
         $scope.history.push(h)
 
+    }
+
+    $scope.historyDisplayChange = function()
+    {
+        $('#gameSection').toggleClass('withHistory', $scope.showHistory);
     }
 
     $scope.requestTypes();
