@@ -7,7 +7,7 @@ function reEscape(s) {
 
 // Template name is the filename of the html file
 // objvar 
-function readTemplate(templateName, objVar, allowMissing)
+function readTemplate(templateName, objVar)
 {
     var result;
     var filePath = "template/" + templateName + ".html";
@@ -58,5 +58,4 @@ function readTemplate(templateName, objVar, allowMissing)
     return result;
 }
 
-
-console.log(readTemplate("pkmGame", {}, true));
+exports.readTemplate = readTemplate;

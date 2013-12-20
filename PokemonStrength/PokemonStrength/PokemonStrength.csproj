@@ -59,6 +59,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="handler\game.js" />
     <Content Include="Pokemon.html" />
     <Content Include="res\img\bug.png" />
     <Content Include="res\img\dark.png" />
@@ -91,6 +92,8 @@
     <Content Include="res\js\script.js" />
     <Content Include="res\js\services.js" />
     <Content Include="style.css" />
+    <Content Include="template\pkmGame.html" />
+    <Content Include="template\typeVs.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\charts\gen2to5.json" />
