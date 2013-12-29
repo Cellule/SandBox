@@ -1,0 +1,50 @@
+extends layout
+
+mixin typeDisplay(extra,showNames)
+    .typesDisplay
+        .pkmType
+            img.pkmTypeImg(ng-src="#{global.typeGameImg}{{#{extra}leftType.imgsrc}}")
+        .vsSign
+            img.vsSignImg(ng-src="#{global.typeGameImg}Versus_sign.png")
+        .pkmType
+            img.pkmTypeImg(ng-src="#{global.typeGameImg}{{#{extra}rightType.imgsrc}}")
+        .pkmType(ng-if="#{extra}dualType")
+            img.pkmTypeImg(ng-src="#{global.typeGameImg}{{#{extra}dualType.imgsrc}}")
+    if showNames
+        .nameDisplay
+            .pkmType
+                .typeName {{#{extra}leftType.name}}
+            .vsSign
+            .pkmType
+                .typeName {{#{extra}rightType.name}}
+            .pkmType(ng-if="#{extra}dualType")
+                .typeName {{#{extra}dualType.name}}
+
+block content
+    article#pkmGame(ng-controller='typeGameController', style='width: 650px;')
+        section#gameSection
+            h1.gameTitle Pokemon Type Game
+            +typeDisplay("",true)
+            .clear
+            .choices
+                button(ng-click="choose(0)") x0
+                button(ng-if="dualType", ng-click="choose(0.25)") x0.25
+                button(ng-click="choose(0.5)") x0.5
+                button(ng-click="choose(1)") x1
+                button(ng-click="choose(2)") x2
+                button(ng-if="dualType", ng-click="choose(4)") x4
+
+            #gameOptions
+                select(ng-model="pathToGenFile", ng-options="item.path as item.name for item in availableGen", ng-change="requestTypes()")
+                | Show history:
+                input#showHistory(type="checkbox", ng-model="showHistory", ng-change="historyDisplayChange()")
+
+        section.historySection(ng-if="showHistory")
+            h1.historyTitle History
+            | History Size:
+            input(type="integer", ng-model="historyLimit", style="width: 20px;")
+            div.historyList
+                div.historyItem(ng-repeat="h in history | reverse | limitTo:historyLimit")
+                    +typeDisplay("h.")
+                    div.historyResult Answer:x{{h.answer}} {{h.answer == h.solution | succesFilter}}  Solution:x{{h.solution}} 
+
