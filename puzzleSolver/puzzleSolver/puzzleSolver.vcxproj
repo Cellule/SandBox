@@ -77,7 +77,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="darts.cpp" />
-    <ClCompile Include="darts_2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

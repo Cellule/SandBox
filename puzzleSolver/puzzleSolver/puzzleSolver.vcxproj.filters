@@ -18,8 +18,5 @@
     <ClCompile Include="darts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="darts_2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

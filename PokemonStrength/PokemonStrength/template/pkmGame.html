@@ -1,0 +1,34 @@
+<article ng-controller="typeGameController" id="pkmGame" style="width: 650px;">
+    <section id="gameSection">
+        <h1 class="gameTitle">Pokemon Type Game</h1>
+        ##readTemplate("typeVs",{obj:""})##
+        <div class="clear"></div>
+
+        <div class="choices">
+            <button ng-click="choose(0)">x0</button>
+            <button ng-if="dualType" ng-click="choose(0.25)">x0.25</button>
+            <button ng-click="choose(0.5)">x0.5</button>
+            <button ng-click="choose(1)">x1</button>
+            <button ng-click="choose(2)">x2</button>
+            <button ng-if="dualType" ng-click="choose(4)">x4</button>
+        </div>
+        <div>
+            <select ng-model="pathToGenFile" ng-options="item.path as item.name for item in availableGen" ng-change="requestTypes()">
+            </select>
+            Show history:
+                <input type="checkbox" ng-model="showHistory" id="showHistory" ng-change="historyDisplayChange()" />
+        </div>
+    </section>
+
+    <section class="historySection" ng-if="showHistory">
+        <h1 class="historyTitle">History</h1>
+        History Size:
+        <input type="integer" ng-model="historyLimit" style="width: 20px;">
+        <div class="historyList">
+            <div class="historyItem" ng-repeat="h in history | reverse | limitTo:historyLimit">
+                ##readTemplate("typeVs",{obj:"h."})##
+                <div class="historyResult">Answer:x{{h.answer}} {{h.answer == h.solution | succesFilter}}  Solution:x{{h.solution}} </div>
+            </div>
+        </div>
+    </section>
+</article>
