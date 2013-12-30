@@ -1,0 +1,17 @@
+doctype 5
+html(ng-app='myApp')
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        mixin jsFile(path)
+            script(type='text/javascript', src='js/'+path)
+        +jsFile('angular/angular.min.js')
+        +jsFile('jQuery/jquery-2.0.3.min.js')
+        +jsFile('elementQuery/elementQuery.min.js')
+        +jsFile('script.js')
+        +jsFile('angular/filters.js')
+        +jsFile('angular/app.js')
+        +jsFile('angular/controllers.js')
+        +jsFile('angular/services.js')
+    body
+        block content

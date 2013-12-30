@@ -2,7 +2,7 @@
 #include <iostream>
 
 using namespace std;
-
+#if 0
 const int green = 1, blue = 2, red = 4;
 const char* colorName[5] = { "","Green", "Blue", "","Red" };
 
@@ -130,5 +130,5 @@ int main()
 
 
 
-
+#endif
 
