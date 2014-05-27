@@ -2,6 +2,17 @@
 
 typedef int MatrixElem;
 
+struct Matrix
+{
+    Matrix()
+    {
+        m = 0;
+        n = 0;
+    }
+    MatrixElem** m;
+    int n;
+};
+
 MatrixElem** AllocateMatrix(int n)
 {
     MatrixElem** m = new MatrixElem*[n];
