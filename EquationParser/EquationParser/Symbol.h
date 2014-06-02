@@ -1,17 +1,14 @@
 #pragma once
 
-enum Tokens
-{
-#define TOK_DCL(name,...) name,
-#include "OperatorList.h"
-#undef TOK_DCL
-    tkMaxOperator,
-};
+
+#include <iostream>
 
 class Symbol
 {
 public:
     Symbol();
-    ~Symbol();
+    virtual ~Symbol();
+
+    virtual void print( std::ostream* out ) const = 0;
 };
 

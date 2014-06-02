@@ -6,5 +6,9 @@ class ConstantInt :
 public:
     ConstantInt();
     ~ConstantInt();
+
+    virtual void print( std::ostream* out ) const;
+
+    int mValue;
 };
 

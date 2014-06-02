@@ -6,5 +6,9 @@ class ConstantFloat :
 public:
     ConstantFloat();
     ~ConstantFloat();
+
+    virtual void print( std::ostream* out ) const;
+
+    double mValue;
 };
 
