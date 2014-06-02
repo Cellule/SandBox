@@ -64,8 +64,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Constant.h" />
+    <ClInclude Include="ConstantFloat.h" />
+    <ClInclude Include="ConstantInt.h" />
+    <ClInclude Include="Operator.h" />
     <ClInclude Include="OperatorList.h" />
-    <ClInclude Include="Operators.h" />
+    <ClInclude Include="Parser.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="Variable.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Constant.cpp" />
+    <ClCompile Include="ConstantFloat.cpp" />
+    <ClCompile Include="ConstantInt.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Operator.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="Symbol.cpp" />
+    <ClCompile Include="Variable.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

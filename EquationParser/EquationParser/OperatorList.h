@@ -1,46 +1,47 @@
 
-TOK_DCL( tkComma, 1, Cma, knopComma, No, knopNone ) // ,
-TOK_DCL( tkDArrow, 1, Asg, knopFncDecl, No, knopNone ) // =>
-TOK_DCL( tkAsg, 1, Asg, knopAsg, No, knopNone ) // =
-TOK_DCL( tkAsgAdd, 1, Asg, knopAsgAdd, No, knopNone ) // +=
-TOK_DCL( tkAsgSub, 1, Asg, knopAsgSub, No, knopNone ) // -=
-TOK_DCL( tkAsgMul, 1, Asg, knopAsgMul, No, knopNone ) // *=
-TOK_DCL( tkAsgDiv, 1, Asg, knopAsgDiv, No, knopNone ) // /=
-TOK_DCL( tkAsgMod, 1, Asg, knopAsgMod, No, knopNone ) // %=
-TOK_DCL( tkAsgAnd, 1, Asg, knopAsgAnd, No, knopNone ) // &=
-TOK_DCL( tkAsgXor, 1, Asg, knopAsgXor, No, knopNone ) // ^=
-TOK_DCL( tkAsgOr, 1, Asg, knopAsgOr, No, knopNone ) // |=
-TOK_DCL( tkAsgLsh, 1, Asg, knopAsgLsh, No, knopNone ) // <<=
-TOK_DCL( tkAsgRsh, 1, Asg, knopAsgRsh, No, knopNone ) // >>=
-TOK_DCL( tkAsgRs2, 1, Asg, knopAsgRs2, No, knopNone ) // >>>=
-TOK_DCL( tkQMark, 1, Que, knopQmark, No, knopNone ) // ?
-TOK_DCL( tkColon, 1, No, knopNone, No, knopNone ) // :
-TOK_DCL( tkLogOr, 1, Lor, knopLogOr, No, knopNone ) // ||
-TOK_DCL( tkLogAnd, 1, Lan, knopLogAnd, No, knopNone ) // &&
-TOK_DCL( tkOr, 1, Bor, knopOr, No, knopNone ) // |
-TOK_DCL( tkXor, 1, Xor, knopXor, No, knopNone ) // ^
-TOK_DCL( tkAnd, 1, Ban, knopAnd, No, knopNone ) // &
-TOK_DCL( tkEQ, 1, Equ, knopEq, No, knopNone ) // ==
-TOK_DCL( tkNE, 1, Equ, knopNe, No, knopNone ) // !=
-TOK_DCL( tkEqv, 1, Equ, knopEqv, No, knopNone ) // ===
-TOK_DCL( tkNEqv, 1, Equ, knopNEqv, No, knopNone ) // !==
-TOK_DCL( tkLT, 1, Cmp, knopLt, No, knopNone ) // <
-TOK_DCL( tkLE, 1, Cmp, knopLe, No, knopNone ) // <=
-TOK_DCL( tkGT, 1, Cmp, knopGt, No, knopNone ) // >
-TOK_DCL( tkGE, 1, Cmp, knopGe, No, knopNone ) // >=
-TOK_DCL( tkLsh, 1, Shf, knopLsh, No, knopNone ) // <<
-TOK_DCL( tkRsh, 1, Shf, knopRsh, No, knopNone ) // >>
-TOK_DCL( tkRs2, 1, Shf, knopRs2, No, knopNone ) // >>>
-TOK_DCL( tkAdd, 1, Add, knopAdd, Uni, knopPos ) // +
-TOK_DCL( tkSub, 1, Add, knopSub, Uni, knopNeg ) // -
-TOK_DCL( tkStar, 1, Mul, knopMul, No, knopNone ) // *
-TOK_DCL( tkDiv, 1, Mul, knopDiv, No, knopNone ) // /
-TOK_DCL( tkPct, 1, Mul, knopMod, No, knopNone ) // %
-TOK_DCL( tkTilde, 1, No, knopNone, Uni, knopNot ) // ~
-TOK_DCL( tkBang, 1, No, knopNone, Uni, knopLogNot ) // !
-TOK_DCL( tkInc, 1, No, knopNone, Uni, knopIncPre ) // ++
-TOK_DCL( tkDec, 1, No, knopNone, Uni, knopDecPre ) // --
-TOK_DCL( tkRParen, 1, No, knopNone, No, knopNone ) // )
-TOK_DCL( tkDotDotDot, 1, No, knopNone, Spr, knopSpread ) // ...
-TOK_DCL( tkLParen, 1, No, knopNone, No, knopNone ) // (
-TOK_DCL( tkLBrack, 1, No, knopNone, No, knopNone ) // [
+TOK_DCL( tkDot      , No, "."   )
+TOK_DCL( tkComma    , Cma, ","   )
+TOK_DCL( tkDArrow   , Asg, "=>"  )
+TOK_DCL( tkAsg      , Asg, "="   )
+TOK_DCL( tkAsgAdd   , Asg, "+="  )
+TOK_DCL( tkAsgSub   , Asg, "-="  )
+TOK_DCL( tkAsgMul   , Asg, "*="  )
+TOK_DCL( tkAsgDiv   , Asg, "/="  )
+TOK_DCL( tkAsgMod   , Asg, "%="  )
+TOK_DCL( tkAsgAnd   , Asg, "&="  )
+TOK_DCL( tkAsgXor   , Asg, "^="  )
+TOK_DCL( tkAsgOr    , Asg, "|="  )
+TOK_DCL( tkAsgLsh   , Asg, "<<=" )
+TOK_DCL( tkAsgRsh   , Asg, ">>=" )
+TOK_DCL( tkAsgRs2   , Asg, ">>>=")
+TOK_DCL( tkQMark    , Que, "?"   )
+TOK_DCL( tkColon    , No , ":"   )
+TOK_DCL( tkLogOr    , Lor, "||"  )
+TOK_DCL( tkLogAnd   , Lan, "&&"  )
+TOK_DCL( tkOr       , Bor, "|"   )
+TOK_DCL( tkXor      , Xor, "^"   )
+TOK_DCL( tkAnd      , Ban, "&"   )
+TOK_DCL( tkEQ       , Equ, "=="  )
+TOK_DCL( tkNE       , Equ, "!="  )
+TOK_DCL( tkEqv      , Equ, "===" )
+TOK_DCL( tkNEqv     , Equ, "!==" )
+TOK_DCL( tkLT       , Cmp, "<"   )
+TOK_DCL( tkLE       , Cmp, "<="  )
+TOK_DCL( tkGT       , Cmp, ">"   )
+TOK_DCL( tkGE       , Cmp, ">="  )
+TOK_DCL( tkLsh      , Shf, "<<"  )
+TOK_DCL( tkRsh      , Shf, ">>"  )
+TOK_DCL( tkRs2      , Shf, ">>>" )
+TOK_DCL( tkAdd      , Add, "+"   )
+TOK_DCL( tkSub      , Add, "-"   )
+TOK_DCL( tkStar     , Mul, "*"   )
+TOK_DCL( tkDiv      , Mul, "/"   )
+TOK_DCL( tkPct      , Mul, "%"   )
+TOK_DCL( tkTilde    , No , "~"   )
+TOK_DCL( tkBang     , No , "!"   )
+TOK_DCL( tkInc      , No , "++"  )
+TOK_DCL( tkDec      , No , "--"  )
+TOK_DCL( tkRParen   , No , ")"   )
+TOK_DCL( tkDotDotDot, No , "..." )
+TOK_DCL( tkLParen   , No , "("   )
+TOK_DCL( tkLBrack   , No , "["   )
