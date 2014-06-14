@@ -6,16 +6,19 @@ using namespace std;
 #include <vector>
 #include <time.h>
 #include <string.h>
+#include <sstream>
 
 #if WIN32
 #include <ppl.h>
 #include "conio.h"
 #define getch() _getch()
+#elif __clang__
 
-#else
+#elif __GNUC__
 #include <curses.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #endif
 
 #include "MatrixUtils.h"
@@ -25,23 +28,22 @@ using namespace std;
 #define USE_MULTITHREAD (WIN32 && 0)
 
 
-#define BASIC 0
-#define STRASSEN 0
+#define BASIC 1
+#define STRASSEN 1
 #define STRASSEN_HALF 1
-#define STRASSEN_DOUBLE 0
+#define STRASSEN_DOUBLE 1
 #define STRASSEN_1 0
 
-const int CutOffDefault = 128;
+int CutOffDefault = 128;
 int CutOff = CutOffDefault;
 
 typedef int(*MultiplicationFunction)(int , MatrixElem** , MatrixElem** , MatrixElem** );
 
-float ExecuteMultiplication( char*, char*, MultiplicationFunction func );
+float ExecuteMultiplication( const Matrix&, const Matrix&, MultiplicationFunction func );
 /// Only preprocess function must be visible to the rest to avoid use the basic function unintentionally
 int MultMatrixBasicPreprocess(const int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix);
 int Strassen(int n, MatrixElem** m1, MatrixElem** m2, MatrixElem** matrix);
 bool printResult = false;
-
 
 void Pause()
 {
@@ -51,56 +53,58 @@ void Pause()
 #endif
 }
 
-MatrixElem** ReadMatrixFromFile(char* filename, int& n)
+MatrixElem** ReadMatrix( istream& file, int& n )
 {
-    ifstream file(filename,ios::in);
-    if(!file.fail())
+    if( !file.fail() )
     {
         file >> n;
-        
+
 #if _DEBUG
-        if(n > sizeof(int)*8-1)
+        if( n > sizeof( int ) * 8 - 1 )
         {
             cout << "N value too large\n";
-            goto READ_MATRIX_ERROR;
+            return 0;
         }
 #endif
 
-    int nElem = 1 << n;
-    n = nElem;
-    MatrixElem** matrix = AllocateMatrix(nElem);
+        int nElem = 1 << n;
+        n = nElem;
+        MatrixElem** matrix = AllocateMatrix( nElem );
 
         // normal reading
-        for(int i=0; i<nElem; ++i)
+        for( int i = 0; i < nElem; ++i )
         {
-            for(int j=0; j<nElem; ++j)
+            for( int j = 0; j < nElem; ++j )
             {
                 file >> matrix[i][j];
-#if _DEBUG
-                // Not enough elements
-                if(j!=nElem && i!=nElem-1 && file.eof())
-                {
-                    printf("Invalid Matrix in file %s\n",filename);
-                    goto READ_MATRIX_ERROR;
-                }
-#endif
             }
         }
 
 
         return matrix;
     }
-#if _DEBUG
-    else
-    {
-        printf("Cannot find file %s\n",filename);
-    }
-
-READ_MATRIX_ERROR:
-#endif
-    file.close();
     return 0;
 }
+
+
+MatrixElem** ReadMatrixFromFile(char* filename, int& n)
+{
+    if( !filename ) return 0;
+
+    ifstream file(filename,ios::in);
+    MatrixElem** res = ReadMatrix( file, n );
+    file.close();
+    return res;
+}
+
+
+
+MatrixElem** ReadMatrixFromString( const string& content, int& n )
+{
+    stringstream file( content );
+    return ReadMatrix( file, n );
+}
+
 
 /// Tests to validate functions and algo
 void Tests()
@@ -285,6 +289,7 @@ void FindCutOff()
 
 int main(int argc, char** argv)
 {
+    Matrix m1, m2;
     char* file1 = NULL, *file2 = NULL;
     for(int i=1; i<argc; ++i)
     {
@@ -317,48 +322,90 @@ int main(int argc, char** argv)
 				return -1;
 			}
 			i += 2;
+
+            m1.m = ReadMatrixFromFile( file1, m1.n );
+            m2.m = ReadMatrixFromFile( file2, m2.n );
 		}
+        else if( strcmp( argv[i], "-c" ) == 0 )
+        {
+            if( argc < i + 1 )
+            {
+                printf( "Missing argument on -c flag\n" );
+                return -1;
+            }
+            CutOffDefault = atoi( argv[++i] );
+        }
+        else if( strcmp( argv[i], "-n" ) == 0 )
+        {
+            if( argc < i + 1 )
+            {
+                printf( "Missing argument on -n flag\n" );
+                return -1;
+            }
+            const int nIn = atoi( argv[++i] );
+            const int n = 1 << nIn;
+            m1.m = GenerateMatrix( n );
+            m2.m = GenerateMatrix( n );
+            m1.n = n;
+            m2.n = n;
+        }
 	}
-    
 
-	CutOff = CutOffDefault;
+    const int defaultSize = 1 << 10;
+    if( !m1.m )
+    {
+        m1.m = GenerateMatrix( defaultSize );
+        m1.n = defaultSize;
+    }
+    if( !m2.m )
+    {
+        m2.m = GenerateMatrix( defaultSize );
+        m2.n = defaultSize;
+    }
 
+    float meanTime = 0;
 #if BASIC
-	float meanTime = ExecuteMultiplication(file1,file2,MultMatrixBasicPreprocess);
-#elif STRASSEN
-	// Strssen Algo
-	float meanTime = ExecuteMultiplication(file1,file2,Strassen);
-#elif STRASSEN_HALF
-
+	meanTime = ExecuteMultiplication(m1,m2,MultMatrixBasicPreprocess);
+    printf( "Basic\n\tTime = %fs\n", meanTime );
+#endif
+#if STRASSEN
+    CutOff = CutOffDefault;
+    // Strassen Algo
+	meanTime = ExecuteMultiplication(m1,m2,Strassen);
+    printf( "Strassen CutOff = %d\n\tTime = %fs\n", CutOff, meanTime );
+#endif
+#if STRASSEN_HALF
 	// With half the cutoff
-	CutOff = CutOff>>1;
-	float meanTime = ExecuteMultiplication(file1,file2,Strassen);
-#elif STRASSEN_DOUBLE
-
+    CutOff = CutOffDefault>>1;
+    meanTime = ExecuteMultiplication( m1, m2, Strassen );
+    printf( "Strassen CutOff = %d\n\tTime = %fs\n", CutOff, meanTime );
+#endif
+#if STRASSEN_DOUBLE
 	// With double Cutoff
-	CutOff = CutOff<<1;
-	float meanTime = ExecuteMultiplication(file1,file2,Strassen);
-#elif STRASSEN_1
+    CutOff = CutOffDefault<<1;
+    meanTime = ExecuteMultiplication(m1,m2,Strassen);
+    printf( "Strassen CutOff = %d\n\tTime = %fs\n", CutOff, meanTime );
+#endif
+#if STRASSEN_1
 	// With Cutoff of 1
 	CutOff = 1;
-	float meanTime = ExecuteMultiplication(file1,file2,Strassen);
-#else
-
+    meanTime = ExecuteMultiplication( m1, m2, Strassen );
+    printf( "Strassen CutOff = %d\n\tTime = %fs\n", CutOff, meanTime );
 #endif
-	printf("Time = %fs\n",meanTime);
-        
-    Pause();
+    DeleteMatrix( m1.n, m1.m );
+    DeleteMatrix( m2.n, m2.m );
+
     return 0;
 }
 
-float ExecuteMultiplication( char* file1, char* file2, MultiplicationFunction func )
+float ExecuteMultiplication( const Matrix& matrix1, const Matrix& matrix2, MultiplicationFunction func )
 {
     float meanTime = 0;
 
-	int n1,n2;
-	MatrixElem** m1 = ReadMatrixFromFile(file1,n1);
-	MatrixElem** m2 = ReadMatrixFromFile(file2,n2);
-
+    MatrixElem** m1 = matrix1.m;
+    MatrixElem** m2 = matrix2.m;
+    const int n1 = matrix1.n;
+    const int n2 = matrix2.n;
 	if(m1 && m2)
 	{
 		if(n1 == n2)
@@ -380,13 +427,6 @@ float ExecuteMultiplication( char* file1, char* file2, MultiplicationFunction fu
 			printf("Matrix of different size\n");
 		}
 	}
-	else
-	{
-		printf("Could not read matrix from file %s and %s\n",file1,file2);
-	}
-
-	DeleteMatrix(n1, m1);
-	DeleteMatrix(n2, m2);	
 
     return meanTime;
 }
