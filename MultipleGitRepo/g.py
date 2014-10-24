@@ -10,6 +10,11 @@ parser.add_argument('-d', '--diff', help='Verifies if there are changes in the r
                     action='store_true')
 parser.add_argument('-p', '--pull', help='Pulls every repo in their current branch',
                     action='store_true')
+parser.add_argument(
+  '-c', '--checkout',
+  help='checkouts every repo to this specified branch',
+  metavar='branch'
+)
 
 args = parser.parse_args()
 
@@ -39,13 +44,20 @@ for i in repos:
   gitRepos.append((repo.git,i))
 
 for (git,repo) in gitRepos:
+  print('Executing repo :'+repo)
   if args.diff:
     diff=git.diff()
     if len(diff) > 0:
       print(i);
+  if args.checkout:
+    try:
+      print(git.checkout(args.checkout))
+    except Exception, e:
+      print(repo,e)
   if args.pull:
     try:
       print(git.pull())
     except Exception, e:
       print(repo,e)
+
 
