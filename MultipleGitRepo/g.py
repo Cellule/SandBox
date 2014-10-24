@@ -8,6 +8,8 @@ parser.add_argument('-r', '--repo', metavar='N', nargs='+',
                    help='Select repositories')
 parser.add_argument('-d', '--diff', help='Verifies if there are changes in the repo',
                     action='store_true')
+parser.add_argument('-p', '--pull', help='Pulls every repo in their current branch',
+                    action='store_true')
 
 args = parser.parse_args()
 
@@ -34,10 +36,16 @@ for i in repos:
   except Exception, e:
     print('error: ',e)
     continue
-  gitRepos.append(repo.git)
+  gitRepos.append((repo.git,i))
 
-if args.diff:
-  for git in gitRepos:
+for (git,repo) in gitRepos:
+  if args.diff:
     diff=git.diff()
     if len(diff) > 0:
       print(i);
+  if args.pull:
+    try:
+      print(git.pull())
+    except Exception, e:
+      print(repo,e)
+
