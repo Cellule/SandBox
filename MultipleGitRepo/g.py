@@ -48,7 +48,7 @@ for (git,repo) in gitRepos:
   if args.diff:
     diff=git.diff()
     if len(diff) > 0:
-      print(i);
+      print(repo+" has changes");
   if args.checkout:
     try:
       print(git.checkout(args.checkout))
