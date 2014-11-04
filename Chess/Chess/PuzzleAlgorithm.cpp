@@ -9,22 +9,25 @@ int main()
     ChessGrid* grid = new ChessGrid();
     ChessPiece* const pieces[] = {
         // Black Team
-        new Pawn( Black, Location( 0, 1 ) ),
-        new Pawn( Black, Location( 0, 2 ) ),
-        new Pawn( Black, Location( 0, 5 ) ),
-        new Pawn( Black, Location( 2, 5 ) ),
-        new Pawn( Black, Location( 2, 7 ) ),
-        new Pawn( Black, Location( 3, 2 ) ),
-        new Pawn( Black, Location( 3, 4 ) ),
-        new Pawn( Black, Location( 3, 5 ) ),
+        new Pawn( Black, Location( 0, 3 ) ),
+        new Pawn( Black, Location( 1, 2 ) ),
+        new Pawn( Black, Location( 1, 5 ) ),
+        new Pawn( Black, Location( 2, 4 ) ),
+        new Pawn( Black, Location( 3, 6 ) ),
         new Pawn( Black, Location( 3, 7 ) ),
-        new Pawn( Black, Location( 4, 7 ) ),
-        new Pawn( Black, Location( 6, 3 ) ),
-        new Pawn( Black, Location( 6, 5 ) ),
+        new Pawn( Black, Location( 4, 4 ) ),
+        new Pawn( Black, Location( 5, 3 ) ),
+        new Pawn( Black, Location( 5, 5 ) ),
+        new Pawn( Black, Location( 6, 0 ) ),
+        new Pawn( Black, Location( 6, 2 ) ),
+		new Pawn( Black, Location( 6, 5 ) ),
+		new Pawn( Black, Location( 7, 1 ) ),
+		new Pawn( Black, Location( 7, 5 ) ),
 
         // white team
-        new Bishop( White, Location( 0, 3 ) ),
-        new Rook( White, Location( 7, 4 ) ),
+        new Rook( White, Location( 2, 2 ) ),
+		new Bishop( White, Location( 2, 5 ) ),
+		new Knight( White, Location( 5, 2 ) ),
     };
     const int nbPieces = sizeof( pieces ) / sizeof( ChessPiece* );
     for (int i = 0; i < nbPieces ; ++i)
@@ -52,10 +55,10 @@ int main()
                 for (int j = 0; j < nbMoves ; ++j)
                 {
                     printf( "Move %c%-2d => %c%-2d\n"
-                            , moves[j].prev.row + 'A'
-                            , moves[j].prev.colomn + 1
-                            , moves[j].next.row + 'A'
-                            , moves[j].next.colomn + 1
+							, moves[j].prev.colomn + 'A'
+                            , moves[j].prev.row + 1
+                            , moves[j].next.colomn + 'A'
+                            , moves[j].next.row + 1
                             );
                 }
                 cout << "Win!\n";

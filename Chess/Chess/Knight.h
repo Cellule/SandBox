@@ -11,5 +11,8 @@ public:
     {
         return new Knight( mTeam, mLocation );
     }
+
+	virtual void FindEats( ChessGrid* grid, vector<ChessPiece*>& canEat );
+
 };
 

@@ -227,6 +227,7 @@ int main(int argc, char** argv)
                                     if( p != n )
                                     {
                                         ++currentScore.mistakes;
+                                        // do beep
                                         cout << (char)7;
                                         PrintCurrentState();
                                     }
